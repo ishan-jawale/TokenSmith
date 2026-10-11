@@ -1,0 +1,33 @@
+{
+  "description": "Unmodified fresh-profile TokenSmith v0.1.14 settings from the existing BuzzDB experiment. No experiment-specific model or prompt overrides.",
+  "appVersion": "0.1.14",
+  "settings": {
+    "maxSources": 4,
+    "application": {
+      "theme": "light",
+      "fontSize": "normal",
+      "defaultModelId": "",
+      "suggestionMode": "on",
+      "followUpSuggestionCount": 4,
+      "searchMode": "hybrid",
+      "explanationDepthEnabled": false,
+      "explanationDepth": "standard",
+      "showSources": true,
+      "embeddingGpuEnabled": true
+    },
+    "modelDefaults": {
+      "systemMessage": "",
+      "suggestedFollowUpPrompt": "Suggest up to {count} short next questions an undergraduate student might ask after the latest answer.\nChoose a specific idea, mechanism, or claim in that answer that deserves further explanation. Do not repeat something already answered or already asked.\nUse subjects the answer has already introduced. Do not introduce new technical names or theories the student has not encountered in the answer.\nAsk about a reason, a small example, an implementation detail, or a limitation when it naturally follows from the answer. Do not invent new premises or unrelated topics.\nPrefer questions that can be explained from the mechanisms already discussed, not judgments requiring missing measurements or undocumented behavior.\nUse conversational language and one idea per question, ideally 6-12 words. Name the subject briefly, including in requests for examples or code.\nAsk from the student to the tutor, not as a quiz. Avoid generic requests for more detail and references to sources or sections.\nReturn fewer questions when useful ideas run out. Return only a JSON array of question strings, without answers or explanations.",
+      "starterQuestionPrompt": "Suggest up to {count} short opening questions about the selected collection for an undergraduate student.\nChoose distinct main concepts represented in the material. Ask broader, higher-level questions about what they do, why they matter, or how they compare.\nAssume the student has not read the material. Do not require knowledge of a numbered alternative, worked example, code symbol, or specific scenario.\nKeep premises neutral: do not assume a technique is necessary or always better.\nUse plain language and one idea per question, ideally 6-12 words. Name the concept so each question makes sense on its own.\nAsk from the student to the tutor, not as a quiz. Avoid generic study advice and references to sources or sections.\nReturn fewer questions if there are fewer distinct topics. Return only a JSON array of question strings, without answers or explanations.",
+      "contextLength": 8192,
+      "maxLength": 1536,
+      "thinking": false,
+      "temperature": 0.7,
+      "topP": 0.4,
+      "topK": 40,
+      "minP": 0,
+      "repeatPenalty": 1.18
+    },
+    "modelSettingsById": {}
+  }
+}

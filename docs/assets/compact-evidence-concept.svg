@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<title>Compact evidence proof of concept</title>
+<desc>Two pipelines use the same Nomic retrieval and Gemma model. The proposed pipeline selects smaller original source passages, with conservative fallbacks. Performance has not been measured.</desc>
+<rect width="1920" height="1080" fill="#F7F8FA"/>
+<text x="80" y="58" font-family="Arial, sans-serif" font-size="58" font-weight="700" fill="#182D3C" dominant-baseline="text-before-edge">Smaller evidence, same model</text>
+<text x="82" y="137" font-family="Arial, sans-serif" font-size="28" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">A focused TokenSmith experiment: change the input, then measure the effect.</text>
+<rect x="80" y="192" width="1760" height="54" rx="14" fill="#EAF0F5" stroke="#EAF0F5" stroke-width="2"/>
+<text x="102" y="204" font-family="Arial, sans-serif" font-size="25" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Same question  /  Same retrieval  /  Same generation settings</text>
+<text x="1320" y="204" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#147B72" dominant-baseline="text-before-edge">CONCEPT - NOT MEASURED</text>
+<text x="82" y="271" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#536777" dominant-baseline="text-before-edge">CURRENT: STANDARD EVIDENCE</text>
+<rect x="80" y="320" width="305" height="188" rx="20" fill="white" stroke="#D7E0E7" stroke-width="2"/>
+<text x="108" y="348" font-family="Arial, sans-serif" font-size="31" font-weight="700" fill="#182D3C" dominant-baseline="text-before-edge">Nomic retrieval</text>
+<text x="108" y="404" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Find relevant sources</text>
+<text x="108" y="444" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Existing ranked results</text>
+<path d="M402 414 L441 414" stroke="#536777" stroke-width="3" fill="none"/>
+<polygon points="453,414 439,406 439,422" fill="#536777"/>
+<rect x="470" y="320" width="487" height="188" rx="20" fill="white" stroke="#D7E0E7" stroke-width="2"/>
+<text x="498" y="348" font-family="Arial, sans-serif" font-size="31" font-weight="700" fill="#536777" dominant-baseline="text-before-edge">Pack retrieved sources</text>
+<text x="498" y="404" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Source units within the budget</text>
+<text x="498" y="444" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Existing context-fit checks</text>
+<path d="M974 414 L1013 414" stroke="#536777" stroke-width="3" fill="none"/>
+<polygon points="1025,414 1011,406 1011,422" fill="#536777"/>
+<rect x="1042" y="320" width="326" height="188" rx="20" fill="#203B4B" stroke="#203B4B" stroke-width="2"/>
+<text x="1070" y="348" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="white" dominant-baseline="text-before-edge">Same Gemma model</text>
+<text x="1070" y="404" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#DAE7ED" dominant-baseline="text-before-edge">Same answer instructions</text>
+<text x="1070" y="444" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#DAE7ED" dominant-baseline="text-before-edge">Same output allowance</text>
+<path d="M1385 414 L1424 414" stroke="#536777" stroke-width="3" fill="none"/>
+<polygon points="1436,414 1422,406 1422,422" fill="#536777"/>
+<rect x="1453" y="320" width="387" height="188" rx="20" fill="white" stroke="#D7E0E7" stroke-width="2"/>
+<text x="1481" y="348" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#182D3C" dominant-baseline="text-before-edge">Source-backed answer</text>
+<text x="1481" y="404" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Inspect required facts</text>
+<text x="1481" y="444" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Measure answer-ready time</text>
+<text x="82" y="548" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#147B72" dominant-baseline="text-before-edge">PROPOSED: COMPACT EVIDENCE</text>
+<rect x="80" y="597" width="305" height="188" rx="20" fill="white" stroke="#D7E0E7" stroke-width="2"/>
+<text x="108" y="625" font-family="Arial, sans-serif" font-size="31" font-weight="700" fill="#182D3C" dominant-baseline="text-before-edge">Nomic retrieval</text>
+<text x="108" y="681" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Find relevant sources</text>
+<text x="108" y="721" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Existing ranked results</text>
+<path d="M402 691 L441 691" stroke="#147B72" stroke-width="3" fill="none"/>
+<polygon points="453,691 439,683 439,699" fill="#147B72"/>
+<rect x="470" y="597" width="487" height="188" rx="20" fill="#E6F3EF" stroke="#147B72" stroke-width="2"/>
+<text x="498" y="625" font-family="Arial, sans-serif" font-size="31" font-weight="700" fill="#147B72" dominant-baseline="text-before-edge">Select relevant passages</text>
+<text x="498" y="681" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Smaller packet of original text</text>
+<text x="498" y="721" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Keep references and nearby context</text>
+<path d="M974 691 L1013 691" stroke="#147B72" stroke-width="3" fill="none"/>
+<polygon points="1025,691 1011,683 1011,699" fill="#147B72"/>
+<rect x="1042" y="597" width="326" height="188" rx="20" fill="#203B4B" stroke="#203B4B" stroke-width="2"/>
+<text x="1070" y="625" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="white" dominant-baseline="text-before-edge">Same Gemma model</text>
+<text x="1070" y="681" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#DAE7ED" dominant-baseline="text-before-edge">Same answer instructions</text>
+<text x="1070" y="721" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#DAE7ED" dominant-baseline="text-before-edge">Same output allowance</text>
+<path d="M1385 691 L1424 691" stroke="#147B72" stroke-width="3" fill="none"/>
+<polygon points="1436,691 1422,683 1422,699" fill="#147B72"/>
+<rect x="1453" y="597" width="387" height="188" rx="20" fill="white" stroke="#D7E0E7" stroke-width="2"/>
+<text x="1481" y="625" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#182D3C" dominant-baseline="text-before-edge">Source-backed answer</text>
+<text x="1481" y="681" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Inspect required facts</text>
+<text x="1481" y="721" font-family="Arial, sans-serif" font-size="24" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Measure answer-ready time</text>
+<rect x="80" y="830" width="1760" height="149" rx="20" fill="#EAF0F5" stroke="#EAF0F5" stroke-width="2"/>
+<text x="110" y="853" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#147B72" dominant-baseline="text-before-edge">MEASURE</text>
+<text x="110" y="898" font-family="Arial, sans-serif" font-size="25" font-weight="400" fill="#182D3C" dominant-baseline="text-before-edge">Prompt processing + total answer wait</text>
+<path d="M693 855 L693 947" stroke="#CCD8E1" stroke-width="2" fill="none"/>
+<text x="722" y="853" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#147B72" dominant-baseline="text-before-edge">PRESERVE</text>
+<text x="722" y="898" font-family="Arial, sans-serif" font-size="25" font-weight="400" fill="#182D3C" dominant-baseline="text-before-edge">Original passages + source references</text>
+<path d="M1314 855 L1314 947" stroke="#CCD8E1" stroke-width="2" fill="none"/>
+<text x="1343" y="853" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#147B72" dominant-baseline="text-before-edge">FALL BACK</text>
+<text x="1343" y="898" font-family="Arial, sans-serif" font-size="25" font-weight="400" fill="#182D3C" dominant-baseline="text-before-edge">Fuller context for complex tasks</text>
+<text x="82" y="1011" font-family="Arial, sans-serif" font-size="25" font-weight="400" fill="#536777" dominant-baseline="text-before-edge">Hypothesis: smaller evidence may reduce latency. Speed and answer quality still need validation.</text>
+</svg>
