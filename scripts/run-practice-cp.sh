@@ -1,0 +1,36 @@
+#!/bin/bash
+# One-command launch for the agreed handbook baseline. No downloads or app changes.
+set -euo pipefail
+
+benchmark_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$benchmark_root"
+
+if ! benchmark_node="$(command -v node)"; then
+  printf '%s\n' 'Node.js was not found. Open your usual development Terminal and run this command again.' >&2
+  exit 1
+fi
+
+benchmark_runner="$benchmark_root/tests/experiments/benchmark-practice.mjs"
+benchmark_book='/Users/Skaterboi/Documents/IIT Delhi/Career/Placement Prep./Competitive Programming.pdf'
+
+for benchmark_argument in "$@"; do
+  if [[ "$benchmark_argument" == '--help' ]]; then
+    exec "$benchmark_node" "$benchmark_runner" --help
+  fi
+done
+
+printf '%s\n' 'Checking the book, Python runtime, Ada connection and required models...'
+"$benchmark_node" "$benchmark_runner" --book "$benchmark_book" --model gemma4:12b "$@" --check
+
+for benchmark_argument in "$@"; do
+  if [[ "$benchmark_argument" == '--check' ]]; then
+    exit 0
+  fi
+done
+
+printf '%s\n' 'Starting the Practice benchmark. Keep the Ada server and SSH tunnel open.'
+if [[ -x /usr/bin/caffeinate ]]; then
+  # Prevent idle sleep for the duration of import and question generation.
+  exec /usr/bin/caffeinate -i "$benchmark_node" "$benchmark_runner" --book "$benchmark_book" --model gemma4:12b "$@"
+fi
+exec "$benchmark_node" "$benchmark_runner" --book "$benchmark_book" --model gemma4:12b "$@"

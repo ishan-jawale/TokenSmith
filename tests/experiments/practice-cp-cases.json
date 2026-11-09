@@ -1,0 +1,14 @@
+{
+  "book": "Competitive Programmer's Handbook, Antti Laaksonen, draft August 2, 2017",
+  "expectedPages": 300,
+  "sessionsPerTopic": 1,
+  "attemptsPerSession": 10,
+  "topics": [
+    { "id": "complexity", "title": "Time complexity", "chapter": 2, "printedPages": [17, 24] },
+    { "id": "sorting", "title": "Sorting and binary search", "chapter": 3, "printedPages": [25, 34] },
+    { "id": "greedy", "title": "Greedy algorithms", "chapter": 6, "printedPages": [57, 64] },
+    { "id": "dp", "title": "Dynamic programming", "chapter": 7, "printedPages": [65, 76] },
+    { "id": "traversal", "title": "Graph traversal: depth-first search and breadth-first search", "chapter": 12, "printedPages": [117, 122] },
+    { "id": "shortest-paths", "title": "Shortest paths: Bellman-Ford, Dijkstra and Floyd-Warshall", "chapter": 13, "printedPages": [123, 132] }
+  ]
+}

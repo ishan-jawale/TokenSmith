@@ -17,6 +17,7 @@ import { useGenerationProgress, type GenerationProgressApi } from './hooks/useGe
 import type { GenerationKind } from '@shared/generation-estimate'
 import { LibraryWorkspace } from './LibraryWorkspace'
 import { defaultPreparation, type IndexMaterialOptions } from '../../shared/preparation'
+import { defaultModelRuntimeSettings, defaultApplicationSettings, defaultSettings } from '@shared/default-settings'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, FormEvent, ReactNode } from 'react'
 import { MessageText } from './MessageText'
@@ -95,7 +96,6 @@ import { fontSizeOptions, normalizeFontSize } from '@shared/typography'
 import {
   defaultFollowUpSuggestionCount,
   defaultStarterQuestionPrompt,
-  defaultSuggestedFollowUpPrompt,
   followUpSuggestionCountOptions,
   normalizeSuggestedFollowUpPrompt,
   normalizeStarterQuestionPrompt,
@@ -183,41 +183,6 @@ const pdfViewerRenderScale = 1.45
 const starterQuestionDebounceMs = 150
 
 const defaultMaterials: CourseMaterial[] = []
-
-const defaultModelRuntimeSettings: ModelRuntimeSettings = {
-  systemMessage: '',
-  suggestedFollowUpPrompt: defaultSuggestedFollowUpPrompt,
-  starterQuestionPrompt: defaultStarterQuestionPrompt,
-  contextLength: 8192,
-  contextLengthMode: 'auto',
-  maxLength: 1536,
-  reasoningMode: 'auto',
-  temperature: 0.7,
-  topP: 0.4,
-  topK: 40,
-  minP: 0,
-  repeatPenalty: 1.18,
-}
-
-const defaultApplicationSettings: ApplicationSettings = {
-  theme: 'light',
-  fontSize: 'normal',
-  defaultModelId: '',
-  suggestionMode: 'on',
-  searchMode: 'hybrid',
-  explanationDepthEnabled: false,
-  explanationDepth: 'standard',
-  followUpSuggestionCount: defaultFollowUpSuggestionCount,
-  showSources: true,
-  embeddingGpuEnabled: true
-}
-
-const defaultSettings: TokenSmithSettings = {
-  maxSources: 4,
-  application: defaultApplicationSettings,
-  modelDefaults: defaultModelRuntimeSettings,
-  modelSettingsById: {}
-}
 
 const defaultModels: LocalModel[] = []
 
