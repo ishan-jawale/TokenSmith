@@ -1,7 +1,7 @@
 // Real Practice client + provider + isolated production Basic PDF import/search.
 // This generates review material; it does not automatically grade question quality.
 import { createHash, randomUUID } from 'node:crypto'
-import { spawn } from 'node:child_process'
+import { execFileSync, spawn } from 'node:child_process'
 import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -32,7 +32,8 @@ if (values.help) {
   --out NEW_DIRECTORY    Output must not exist; default tmp/practice-cp-<timestamp>
 Full run: 6 topics x 1 continuous session x 10 attempts = 60 scheduled attempts.
 Settings come from the application's shared built-in defaults; Practice applies its usual overrides.
-Rejected generations are retained, never silently retried. Accepted questions need human review.
+Production validation retries are retained and logged; no extra benchmark retries are added.
+Accepted questions need human review.
 The full book is indexed. Topic retrieval and source rotation use the production Practice client.
 No installed library, conversations, settings, or credentials are changed.`)
   process.exit(0)
@@ -155,7 +156,10 @@ const model = values.provider === 'ollama'
 const embedder = { id: 'benchmark-embedder', name: values.embedder, engine: 'ollama', role: 'embedder',
   ollamaModelName: values.embedder, ollamaBaseUrl: baseUrl }
 const suite = { createdAt: new Date().toISOString(), status: 'running', smoke: Boolean(values.smoke),
-  method: 'Production Practice topic retrieval, source rotation, prompt, provider and parser; isolated Basic full-book import. No UI timing, no silent retries. Accepted means application validation only; semantic quality is ungraded.',
+  method: 'Production Practice topic retrieval, source rotation, prompt, provider and parser; isolated Basic full-book import. Production validation retries are recorded; no extra benchmark retries. No UI timing. Accepted means application validation only; semantic quality is ungraded.',
+  gitCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+  gitBranch: execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim(),
+  gitStatus: execFileSync('git', ['status', '--porcelain'], { encoding: 'utf8' }).trim(),
   book, bookSha256: hash(book), plan, model: { ...model, apiKey: undefined }, modelSettings,
   application, preparationSettings, settingsSource: 'Application built-in defaults from shared/default-settings.ts; existing Practice-specific overrides are applied by the production client/provider.',
   chatModelMetadata: values.provider === 'ollama' ? installed(models, values.model) : undefined,
@@ -198,6 +202,7 @@ function render() {
     `${plan.topics.length} topics; ${plan.sessionsPerTopic} session per topic; ${plan.attemptsPerSession} scheduled attempts per session.`,
     'Application built-in defaults, with the usual Practice-specific behavior. Effective requests are saved in results.json.', '',
     `Scheduled slots recorded: ${suite.rows.length}. Application-accepted questions: ${accepted.length}. Exact repeats across accepted questions: ${duplicates.length}.`,
+    `Provider generation attempts: ${suite.rows.reduce((n, r) => n + (r.generationAttempts?.length ?? 0), 0)}. Validation rejections: ${suite.rows.reduce((n, r) => n + (r.validationRejections?.length ?? 0), 0)}. Production may retry once within each scheduled slot.`,
     `Generated keys among accepted questions: ${accepted.filter(r => r.question.correctAnswer).length} True; ${accepted.filter(r => !r.question.correctAnswer).length} False. These are generated labels, not verified answers.`,
     '**These are execution counts, not question-quality scores. All questions remain ungraded.**', '',
     '| Topic | Accepted | Generation errors | Blocked by retrieval | Median accepted generation (s) |', '|---|---:|---:|---:|---:|',
@@ -214,6 +219,7 @@ function render() {
     '# Generated Practice questions - ungraded', '',
     ...suite.rows.flatMap(r => [
       `## ${r.id}`, '', `Topic: ${r.topic}. Status: ${r.status}. Time: ${(r.seconds ?? 0).toFixed(2)}s.`, '',
+      ...(r.validationRejections ?? []).flatMap(rejection => [`**Validation rejection, attempt ${rejection.attempt}:** ${rejection.reason}`, '', '```json', rejection.response, '```', '']),
       ...(r.question ? [r.question.text, '', `**Generated key:** ${r.question.correctAnswer ? 'True' : 'False'}`, '',
         '**Generated explanation:**', '', r.question.referenceAnswer, '', '**Generated assumptions:**',
         ...r.question.rubric.assumptions.map(a => `- ${a}`), '', '**Generated criteria and quoted evidence:**',
@@ -238,12 +244,16 @@ try {
   const { documents } = await w.call('study_documents')
   if (!documents.length) throw new Error('No indexed documents were available.')
   const client = createPracticeClient({
+    logPracticeQuestionRejected: async rejection => { activeRow.validationRejections.push(rejection) },
     searchLibrary: (query, materials, limit, embeddingModels, searchMode, options) => w.call('search', { query, materials, limit, embeddingModels, searchMode, ...options }),
     sendChatMessage: async request => {
       // Keep credentials only in memory. Record actual effective request settings and supplied sources.
       activeRow.request = { ...request, model: { ...request.model, apiKey: undefined } }
+      const generation = { request: activeRow.request }
+      activeRow.generationAttempts.push(generation)
       const reply = await (values.provider === 'ollama' ? runOllamaStudyEngine : runRemoteStudyEngine)(request, { signal: AbortSignal.timeout(300_000) })
       activeRow.reply = reply
+      generation.reply = reply
       return reply
     }
   }, model, settings, { materials: [{ ...indexed.material, isActive: true }], embeddingModels: [embedder] })
@@ -263,7 +273,7 @@ try {
       save()
       for (let i = 1; i <= (values.smoke ? 1 : plan.attemptsPerSession); i++) {
         const row = { id: `${session.id}-${i}`, topicId: topic.id, topic: topic.title, session: n, slot: i,
-          status: 'running', reviewStatus: 'ungraded', httpRequests: [], httpResponses: [] }
+          status: 'running', reviewStatus: 'ungraded', httpRequests: [], httpResponses: [], generationAttempts: [], validationRejections: [] }
         suite.rows.push(row); activeRow = row
         const began = performance.now()
         try {

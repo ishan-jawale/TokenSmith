@@ -62,7 +62,11 @@ The frozen plan in `tests/experiments/practice-cp-cases.json` defines six topics
 time complexity, sorting/binary search, greedy algorithms, dynamic programming,
 graph traversal, and shortest paths. Each has one continuous session with ten
 scheduled generation attempts: **60 scheduled attempts**, not a guarantee of 60
-usable questions. There are no hidden retries or replacement questions. A failed
+usable questions. Joshua's PR retries a rejected question once, with validation
+feedback. The runner preserves that production behavior and records each attempt,
+response and rejection reason; it adds no extra retries or replacement questions.
+There can therefore be up to 120 generation attempts across 60 scheduled slots.
+A failed
 topic retrieval blocks that session's slots and is reported separately. An invalid
 generation is retained; the next slot continues with the accepted session history,
 as the app would after a failed generation.
