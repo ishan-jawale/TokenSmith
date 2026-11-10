@@ -1,0 +1,36 @@
+{
+  "bookSha256": "98460b2571e08cdec8103213c85b041457f7009536ea82b1d5f509d793ac60d9",
+  "provenance": "Verbatim lines from BuzzDB; no cleanup. Offsets are Python code-point indices in the original Markdown, not UTF-16 unit offsets.",
+  "lines": [
+    {
+      "needle": "A sale of $150",
+      "start": 646232,
+      "end": 646285,
+      "text": "1.  `insert(10, 150)`: A sale of $150 in category 10."
+    },
+    {
+      "needle": "A sale of $200",
+      "start": 646286,
+      "end": 646339,
+      "text": "2.  `insert(20, 200)`: A sale of $200 in category 20."
+    },
+    {
+      "needle": "Another sale of $50",
+      "start": 646340,
+      "end": 646397,
+      "text": "3.  `insert(10, 50)`: Another sale of $50 in category 10."
+    },
+    {
+      "needle": "a price between $50 and $100",
+      "start": 885744,
+      "end": 886032,
+      "text": "Why is this so critical? Database queries rarely ask for a single record. More often, they request a *range* of records, such as \"find all employees hired between May and July\" or \"list all products with a price between $50 and $100.\" With a B+ Tree, a range scan is incredibly efficient:"
+    },
+    {
+      "needle": "employees earning over $100,000",
+      "start": 1256599,
+      "end": 1256644,
+      "text": "- \"Find all employees earning over $100,000.\""
+    }
+  ]
+}

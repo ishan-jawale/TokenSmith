@@ -1,0 +1,315 @@
+{
+  "book": "Competitive Programmer's Handbook, Antti Laaksonen, draft August 2, 2017",
+  "bookSha256": "b2f59418500e785c982d854141b2014c3f20106dcec7d2889bb9bd234c8ceb32",
+  "provenance": "Verbatim extracted passages retained in the completed 2026-11-09 benchmark; no manual cleanup or inserted Markdown.",
+  "passages": [
+    {
+      "id": "auto:000052-89a66b02",
+      "sourceKey": "1:1:auto:000052-89a66b02",
+      "text": "Order of magnitude A time complexity does not tell us the exact number of times the code inside a loop is executed, but it only shows the order of magnitude. In the following examples, the code inside the loop is executed 3n, n+5 and dn/2e times, but the time complexity of each code is O(n). for (int i = 1; i <= 3*n; i++) { // code } for (int i = 1; i <= n+5; i++) { // code } for (int i = 1; i <= n; i += 2) { // code } As another example, the time complexity of the following code is O(n 2 ): for (int i = 1; i <= n; i++) { for (int j = i+1; j <= n; j++) { // code } }\n\nPhases\n\nIf the algorithm consists of consecutive phases, the total time complexity is the largest time complexity of a single phase. The reason for this is that the slowest phase is usually the bottleneck of the code. For example, the following code consists of three phases with time complexities\n\nO(n), O(n",
+      "locator": "Page 28",
+      "firstSeen": "complexity-1-1"
+    },
+    {
+      "id": "auto:000054-8e71db3e",
+      "sourceKey": "1:1:auto:000054-8e71db3e",
+      "text": "Several variables Sometimes the time complexity depends on several factors. In this case, the time complexity formula contains several variables. For example, the time complexity of the following code is O(nm): for (int i = 1; i <= n; i++) { for (int j = 1; j <= m; j++) { // code } }\n\nRecursion",
+      "locator": "Page 29",
+      "firstSeen": "complexity-1-1"
+    },
+    {
+      "id": "auto:000055-2eda3858",
+      "sourceKey": "1:1:auto:000055-2eda3858",
+      "text": "The time complexity of a recursive function depends on the number of times the function is called and the time complexity of a single call. The total time complexity is the product of these values. For example, consider the following function: void f(int n) { if (n == 1) return; f(n-1); } The call f(n) causes n function calls, and the time complexity of each call is O(1). Thus, the total time complexity is O(n). As another example, consider the following function: void g(int n) { if (n == 1) return; g(n-1); g(n-1); } In this case each function call generates two other calls, except for n = 1. Let us see what happens when g is called with parameter n. The following table shows the function calls produced by this single call: function call number of calls g(n) 1 g(n−1) 2 g(n−2) 4 ··· ··· g(1) 2n−1 Based on this, the time complexity is 1+2+4+··· +2 n−1 = 2 n −1 = O(2n ). 19",
+      "locator": "Page 29",
+      "firstSeen": "complexity-1-1"
+    },
+    {
+      "id": "auto:000058-b194a52d",
+      "sourceKey": "1:1:auto:000058-b194a52d",
+      "text": ") This time complexity often indicates that the algorithm iterates through all subsets of the input elements. For example, the subsets of {1,2,3} are ;, {1}, {2}, {3}, {1,2}, {1,3}, {2,3} and {1,2,3}. O(n!) This time complexity often indicates that the algorithm iterates through all permutations of the input elements. For example, the permutations of {1,2,3} are (1,2,3), (1,3,2), (2,1,3), (2,3,1), (3,1,2) and (3,2,1). An algorithm is polynomial if its time complexity is at most O(n k ) where k is a constant. All the above time complexities except O(2n ) and O(n!) are polynomial. In practice, the constant k is usually small, and therefore a polynomial time complexity roughly means that the algorithm is efficient. Most algorithms in this book are polynomial. Still, there are many important problems for which no polynomial algorithm is known, i. e. , nobody knows how to solve them efficiently. NP-hard problems are an important set of problems, for which no polynomial algorithm is known1 .",
+      "locator": "Page 30",
+      "firstSeen": "complexity-1-1"
+    },
+    {
+      "id": "auto:000050-0be2124d",
+      "sourceKey": "1:1:auto:000050-0be2124d",
+      "text": "Chapter 2\n\nTime complexity The efficiency of algorithms is important in competitive programming. Usually, it is easy to design an algorithm that solves the problem slowly, but the real challenge is to invent a fast algorithm. If the algorithm is too slow, it will get only partial points or no points at all. The time complexity of an algorithm estimates how much time the algo￾rithm will use for some input. The idea is to represent the efficiency as an function whose parameter is the size of the input. By calculating the time complexity, we can find out whether the algorithm is fast enough without implementing it. 2.1 Calculation rules The time complexity of an algorithm is denoted O(···) where the three dots represent some function. Usually, the variable n denotes the input size. For example, if the input is an array of numbers, n will be the size of the array, and if the input is a string, n will be the length of the string.\n\nLoops",
+      "locator": "Page 27",
+      "firstSeen": "complexity-1-2"
+    },
+    {
+      "id": "auto:000056-84d87beb",
+      "sourceKey": "1:1:auto:000056-84d87beb",
+      "text": "2.2 Complexity classes The following list contains common time complexities of algorithms: O(1) The running time of a constant-time algorithm does not depend on the input size. A typical constant-time algorithm is a direct formula that calculates the answer. O(logn) A logarithmic algorithm often halves the input size at each step. The running time of such an algorithm is logarithmic, because log2 n equals the number of times n must be divided by 2 to get 1.\n\nO(",
+      "locator": "Page 30",
+      "firstSeen": "complexity-1-3"
+    },
+    {
+      "id": "auto:000051-67d886da",
+      "sourceKey": "1:1:auto:000051-67d886da",
+      "text": "A common reason why an algorithm is slow is that it contains many loops that go through the input. The more nested loops the algorithm contains, the slower it is. If there are k nested loops, the time complexity is O(n k ). For example, the time complexity of the following code is O(n): for (int i = 1; i <= n; i++) { // code } And the time complexity of the following code is O(n 2 ): for (int i = 1; i <= n; i++) { for (int j = 1; j <= n; j++) { // code } } 17",
+      "locator": "Page 27",
+      "firstSeen": "complexity-1-4"
+    },
+    {
+      "id": "auto:000003-3812ea6c",
+      "sourceKey": "1:1:auto:000003-3812ea6c",
+      "text": "25 3. 2 Sorting in C++ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29 3. 3 Binary search . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 31 4 Data structures 35 4. 1 Dynamic arrays . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 35 4. 2 Set structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 37 4. 3 Map structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 38 4. 4 Iterators and ranges . . . . . . . . . . . . . . . . . . . . . . . . . . . . 39 4. 5 Other structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41 4. 6 Comparison to sorting . . . . . . . . . . . . . . . . . . . . . . . . . . . 44 5 Complete search 47 5. 1 Generating subsets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 47 5. 2 Generating permutations . . . . . . . . . . . . . . . . . . . . . . . . . 49 5. 3 Backtracking . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 50 5.",
+      "locator": "Page 3",
+      "firstSeen": "sorting-1-1"
+    },
+    {
+      "id": "auto:000083-8ae7d053",
+      "sourceKey": "1:1:auto:000083-8ae7d053",
+      "text": "x coordinate and secondarily by the y coordinate. struct P { int x, y; bool operator<(const P &p) { if (x ! = p. x) return x < p. x; else return y < p. y; } }; Comparison functions It is also possible to give an external comparison function to the sort function as a callback function. For example, the following comparison function comp sorts strings primarily by length and secondarily by alphabetical order: bool comp(string a, string b) { if (a. size() ! = b. size()) return a. size() < b. size(); return a < b; } Now a vector of strings can be sorted as follows: sort(v. begin(), v. end(), comp); 3. 3 Binary search A general method for searching for an element in an array is to use a for loop that iterates through the elements of the array.",
+      "locator": "Page 41",
+      "firstSeen": "sorting-1-1"
+    },
+    {
+      "id": "auto:000084-dda87bac",
+      "sourceKey": "1:1:auto:000084-dda87bac",
+      "text": "For example, the following code searches for an element x in an array: for (int i = 0; i < n; i++) { if (array[i] == x) { // x found at index i } } The time complexity of this approach is O(n), because in the worst case, it is necessary to check all elements of the array. If the order of the elements is arbitrary, this is also the best possible approach, because there is no additional information available where in the array we should search for the element x. However, if the array is sorted, the situation is different. In this case it is possible to perform the search much faster, because the order of the elements in the array guides the search. The following binary search algorithm efficiently searches for an element in a sorted array in O(logn) time. 31",
+      "locator": "Page 41",
+      "firstSeen": "sorting-1-1"
+    },
+    {
+      "id": "auto:000088-b4ad9bcf",
+      "sourceKey": "1:1:auto:000088-b4ad9bcf",
+      "text": "The functions assume that the array is sorted. If there is no such element, the pointer points to the element after the last array element. For example, the following code finds out whether an array contains an element with value x: auto k = lower_bound(array,array+n,x)-array; if (k < n && array[k] == x) { // x found at index k } Then, the following code counts the number of elements whose value is x: auto a = lower_bound(array, array+n, x); auto b = upper_bound(array, array+n, x); cout << b-a << \"\\n\"; Using equal_range, the code becomes shorter: auto r = equal_range(array, array+n, x); cout << r. second-r. first << \"\\n\"; Finding the smallest solution An important use for binary search is to find the position where the value of a function changes. Suppose that we wish to find the smallest value k that is a valid solution for a problem. We are given a function ok(x) that returns true if x is a valid solution and false otherwise.",
+      "locator": "Page 43",
+      "firstSeen": "sorting-1-1"
+    },
+    {
+      "id": "auto:000515-6b4cb63e",
+      "sourceKey": "1:1:auto:000515-6b4cb63e",
+      "text": "We can make the brute force algorithm more efficient by using hashing, because the algorithm compares substrings of strings. Using hashing, each comparison only takes O(1) time, because only hash values of substrings are compared. This results in an algorithm with time complexity O(n), which is the best possible time complexity for this problem. By combining hashing and binary search, it is also possible to find out the lexicographic order of two strings in logarithmic time. This can be done by calculating the length of the common prefix of the strings using binary search. Once we know the length of the common prefix, we can just check the next character after the prefix, because this determines the order of the strings. Collisions and parameters An evident risk when comparing hash values is a collision, which means that two strings have different contents but equal hash values.",
+      "locator": "Page 256",
+      "firstSeen": "sorting-1-2"
+    },
+    {
+      "id": "auto:000085-f655a4f2",
+      "sourceKey": "1:1:auto:000085-f655a4f2",
+      "text": "Method 1 The usual way to implement binary search resembles looking for a word in a dictionary. The search maintains an active region in the array, which initially contains all array elements. Then, a number of steps is performed, each of which halves the size of the region. At each step, the search checks the middle element of the active region. If the middle element is the target element, the search terminates. Otherwise, the search recursively continues to the left or right half of the region, depending on the value of the middle element. The above idea can be implemented as follows: int a = 0, b = n-1; while (a <= b) { int k = (a+b)/2; if (array[k] == x) { // x found at index k } if (array[k] > x) b = k-1; else a = k+1; } In this implementation, the active region is a... b, and initially the region is 0... n −1. The algorithm halves the size of the region at each step, so the time complexity is O(logn).",
+      "locator": "Page 42",
+      "firstSeen": "sorting-1-3"
+    },
+    {
+      "id": "auto:000091-e48b23d9",
+      "sourceKey": "1:1:auto:000091-e48b23d9",
+      "text": "The idea is to use binary search for finding the largest value of x for which f (x) < f (x+1). This implies that k = x+1 because f (x+1) > f (x+2). The following code implements the search: int x = -1; for (int b = z; b >= 1; b /= 2) { while (f(x+b) < f(x+b+1)) x += b; } int k = x+1; Note that unlike in the ordinary binary search, here it is not allowed that consecutive values of the function are equal. In this case it would not be possible to know how to continue the search. 34",
+      "locator": "Page 44",
+      "firstSeen": "sorting-1-4"
+    },
+    {
+      "id": "auto:000604-7b509b5b",
+      "sourceKey": "1:1:auto:000604-7b509b5b",
+      "text": "2SAT problem, 160 2SUM problem, 78 3SAT problem, 162 3SUM problem, 79 adjacency list, 113 adjacency matrix, 114 alphabet, 243 amortized analysis, 77 ancestor, 163 and operation, 96 Andrew’s algorithm, 279 antichain, 193 arithmetic progression, 10 backtracking, 50 Bellman–Ford algorithm, 123 binary code, 62 binary indexed tree, 86 binary search, 31 binary tree, 139 Binet’s formula, 14 binomial coefficient, 208 binomial distribution, 230 bipartite graph, 112, 122 birthday paradox, 247 bit representation, 95 bit shift, 97 bitset, 41 border, 244 breadth-first search, 119 bubble sort, 25 Burnside’s lemma, 214 Catalan number, 210 Cayley’s formula, 215 child, 133 Chinese remainder theorem, 205 closest pair, 277 codeword, 62 cofactor, 219 collision, 246 coloring, 112, 233 combinatorics, 207 comparison function, 31 comparison operator, 30 complement, 12 complete graph, 111 complex, 266 complex number, 266 complexity classes, 20 component, 110 component graph, 157 conditional probability, 227 co",
+      "locator": "Page 297",
+      "firstSeen": "sorting-1-5"
+    },
+    {
+      "id": "auto:000136-35624ed8",
+      "sourceKey": "1:1:auto:000136-35624ed8",
+      "text": "Greedy algorithms A greedy algorithm constructs a solution to the problem by always making a choice that looks the best at the moment. A greedy algorithm never takes back its choices, but directly constructs the final solution. For this reason, greedy algorithms are usually very efficient. The difficulty in designing greedy algorithms is to find a greedy strategy that always produces an optimal solution to the problem. The locally optimal choices in a greedy algorithm should also be globally optimal. It is often difficult to argue that a greedy algorithm works. 6. 1 Coin problem As a first example, we consider a problem where we are given a set of coins and our task is to form a sum of money n using the coins. The values of the coins are coins = {c1, c2,... , ck}, and each coin can be used as many times we want. What is the minimum number of coins needed? For example, if the coins are the euro coins (in cents) {1,2,5,10,20,50,100,200} and x = 520, we need at least four coins.",
+      "locator": "Page 67",
+      "firstSeen": "greedy-1-1"
+    },
+    {
+      "id": "auto:000139-9638b623",
+      "sourceKey": "1:1:auto:000139-9638b623",
+      "text": "General case In the general case, the coin set can contain any coins and the greedy algorithm does not necessarily produce an optimal solution. We can prove that a greedy algorithm does not work by showing a counterex￾ample where the algorithm gives a wrong answer. In this problem we can easily find a counterexample: if the coins are {1,3,4} and the target sum is 6, the greedy algorithm produces the solution 4+1+1 while the optimal solution is 3+3. It is not known if the general coin problem can be solved using any greedy algorithm1 . However, as we will see in Chapter 7, in some cases, the general problem can be efficiently solved using a dynamic programming algorithm that always gives the correct answer. 6. 2 Scheduling Many scheduling problems can be solved using greedy algorithms. A classic problem is as follows: Given n events with their starting and ending times, find a schedule that includes as many events as possible. It is not possible to select an event partially.",
+      "locator": "Page 68",
+      "firstSeen": "greedy-1-1"
+    },
+    {
+      "id": "auto:000005-43879e65",
+      "sourceKey": "1:1:auto:000005-43879e65",
+      "text": "6 Greedy algorithms 57 6. 1 Coin problem . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57 6. 2 Scheduling . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 58 6. 3 Tasks and deadlines . . . . . . . . . . . . . . . . . . . . . . . . . . . . 60 6. 4 Minimizing sums . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 61 6. 5 Data compression . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 62 7 Dynamic programming 65 7. 1 Coin problem . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 65 7. 2 Longest increasing subsequence . . . . . . . . . . . . . . . . . . . . . 70 7. 3 Paths in a grid . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 71 7. 4 Knapsack problems . . . . . . . . . . . . . . . . . . . . . . . . . . . . 72 7. 5 Edit distance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 74 7. 6 Counting tilings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "locator": "Page 4",
+      "firstSeen": "greedy-1-1"
+    },
+    {
+      "id": "auto:000141-3167e56e",
+      "sourceKey": "1:1:auto:000141-3167e56e",
+      "text": "A\n\nB\n\nC\n\nD\n\nIt is possible to invent several greedy algorithms for the problem, but which of them works in every case? Algorithm 1 The first idea is to select as short events as possible. In the example case this algorithm selects the following events:\n\nA\n\nB\n\nC\n\nD\n\nHowever, selecting short events is not always a correct strategy. For example, the algorithm fails in the following case: If we select the short event, we can only select one event. However, it would be possible to select both long events. Algorithm 2 Another idea is to always select the next possible event that begins as early as possible. This algorithm selects the following events:\n\nA\n\nB\n\nC\n\nD\n\nHowever, we can find a counterexample also for this algorithm. For example, in the following case, the algorithm only selects one event: If we select the first event, it is not possible to select any other events. However, it would be possible to select the other two events. 59",
+      "locator": "Page 69",
+      "firstSeen": "greedy-1-1"
+    },
+    {
+      "id": "auto:000153-e5b672ec",
+      "sourceKey": "1:1:auto:000153-e5b672ec",
+      "text": "Chapter 7\n\nDynamic programming Dynamic programming is a technique that combines the correctness of com￾plete search and the efficiency of greedy algorithms. Dynamic programming can be applied if the problem can be divided into overlapping subproblems that can be solved independently. There are two uses for dynamic programming:\n\n• Finding an optimal solution: We want to find a solution that is as large\n\nas possible or as small as possible.\n\n• Counting the number of solutions: We want to calculate the total num￾ber of possible solutions.",
+      "locator": "Page 75",
+      "firstSeen": "greedy-1-2"
+    },
+    {
+      "id": "auto:000308-edad65db",
+      "sourceKey": "1:1:auto:000308-edad65db",
+      "text": "In a similar way, a maximum spanning tree is a spanning tree whose weight is as large as possible. The weight of a maximum spanning tree for the example graph is 32: 1 2 3 4 5 6 5 9 5 7 6 Note that a graph may have several minimum and maximum spanning trees, so the trees are not unique. It turns out that several greedy methods can be used to construct minimum and maximum spanning trees. In this chapter, we discuss two algorithms that process the edges of the graph ordered by their weights. We focus on finding minimum spanning trees, but the same algorithms can find maximum spanning trees by processing the edges in reverse order. 15. 1 Kruskal’s algorithm In Kruskal’s algorithm1 , the initial spanning tree only contains the nodes of the graph and does not contain any edges. Then the algorithm goes through the edges ordered by their weights, and always adds an edge to the tree if it does not create a cycle. The algorithm maintains the components of the tree.",
+      "locator": "Page 152",
+      "firstSeen": "greedy-1-3"
+    },
+    {
+      "id": "auto:000116-2a660462",
+      "sourceKey": "1:1:auto:000116-2a660462",
+      "text": "Complete search Complete search is a general method that can be used to solve almost any algorithm problem. The idea is to generate all possible solutions to the problem using brute force, and then select the best solution or count the number of solutions, depending on the problem. Complete search is a good technique if there is enough time to go through all the solutions, because the search is usually easy to implement and it always gives the correct answer. If complete search is too slow, other techniques, such as greedy algorithms or dynamic programming, may be needed. 5. 1 Generating subsets We first consider the problem of generating all subsets of a set of n elements. For example, the subsets of {0,1,2} are ;, {0}, {1}, {2}, {0,1}, {0,2}, {1,2} and {0,1,2}. There are two common methods to generate subsets: we can either perform a recursive search or exploit the bit representation of integers. Method 1 An elegant way to go through all subsets of a set is to use recursion.",
+      "locator": "Page 57",
+      "firstSeen": "greedy-1-4"
+    },
+    {
+      "id": "auto:000137-d472d07a",
+      "sourceKey": "1:1:auto:000137-d472d07a",
+      "text": "The optimal solution is to select coins 200+200+100+20 whose sum is 520. Greedy algorithm A simple greedy algorithm to the problem always selects the largest possible coin, until the required sum of money has been constructed. This algorithm works in the example case, because we first select two 200 cent coins, then one 100 cent coin and finally one 20 cent coin. But does this algorithm always work? It turns out that if the coins are the euro coins, the greedy algorithm always works, i. e. , it always produces a solution with the fewest possible number of coins. The correctness of the algorithm can be shown as follows: First, each coin 1, 5, 10, 50 and 100 appears at most once in an optimal solution, because if the solution would contain two such coins, we could replace 57",
+      "locator": "Page 67",
+      "firstSeen": "greedy-1-5"
+    },
+    {
+      "id": "auto:000155-b9d24a79",
+      "sourceKey": "1:1:auto:000155-b9d24a79",
+      "text": "Now is time to solve the problem efficiently using dynamic programming, so that the algorithm works for any coin set. The dynamic programming algorithm is based on a recursive function that goes through all possibilities how to form the sum, like a brute force algorithm. However, the dynamic programming algorithm is efficient because it uses memoization and calculates the answer to each subproblem only once. 65",
+      "locator": "Page 75",
+      "firstSeen": "dp-1-1"
+    },
+    {
+      "id": "auto:000295-170add3d",
+      "sourceKey": "1:1:auto:000295-170add3d",
+      "text": "The following function call starts the search at node x: dfs(x, 0); In the first call e = 0, because there is no previous node, and it is allowed to proceed to any direction in the tree. Dynamic programming Dynamic programming can be used to calculate some information during a tree traversal. Using dynamic programming, we can, for example, calculate in O(n) time for each node of a rooted tree the number of nodes in its subtree or the length of the longest path from the node to a leaf. 134",
+      "locator": "Page 144",
+      "firstSeen": "dp-1-1"
+    },
+    {
+      "id": "auto:000329-172574a7",
+      "sourceKey": "1:1:auto:000329-172574a7",
+      "text": "Extending Dijkstra’s algorithm A by-product of Dijkstra’s algorithm is a directed, acyclic graph that indicates for each node of the original graph the possible ways to reach the node using a shortest path from the starting node. Dynamic programming can be applied to that graph. For example, in the graph 1 2 3 4 5 3 5 4 8 2 1 2 the shortest paths from node 1 may use the following edges: 1 2 3 4 5 3 5 4 2 1 2 Now we can, for example, calculate the number of shortest paths from node 1 to node 5 using dynamic programming: 1 2 3 4 5 3 5 4 2 1 2 1 1 2 3 3 Representing problems as graphs Actually, any dynamic programming problem can be represented as a directed, acyclic graph. In such a graph, each node corresponds to a dynamic programming state and the edges indicate how the states depend on each other. As an example, consider the problem of forming a sum of money n using coins {c1, c2,... , ck}.",
+      "locator": "Page 163",
+      "firstSeen": "dp-1-1"
+    },
+    {
+      "id": "auto:000164-0824974a",
+      "sourceKey": "1:1:auto:000164-0824974a",
+      "text": "Often the number of solutions is so large that it is not required to calculate the exact number but it is enough to give the answer modulo m where, for example, m = 109 +7. This can be done by changing the code so that all calculations are done modulo m. In the above code, it suffices to add the line count[x] %= m; after the line count[x] += count[x-c]; Now we have discussed all basic ideas of dynamic programming. Since dynamic programming can be used in many different situations, we will now go through a set of problems that show further examples about the possibilities of dynamic programming. 7. 2 Longest increasing subsequence Our first problem is to find the longest increasing subsequence in an array of n elements. This is a maximum-length sequence of array elements that goes from left to right, and each element in the sequence is larger than the previous element.",
+      "locator": "Page 80",
+      "firstSeen": "dp-1-2"
+    },
+    {
+      "id": "auto:000556-37cf1cb0",
+      "sourceKey": "1:1:auto:000556-37cf1cb0",
+      "text": "The nodes of a dynamic tree can be represented as structs: struct node { int value; int x, y; node *left, *right; node(int v, int x, int y) : value(v), x(x), y(y) {} }; Here value is the value of the node, [x,y] is the corresponding range, and left and right point to the left and right subtree. After this, nodes can be created as follows: // create new node node *x = new node(0, 0, 15); // change value x->value = 5; Sparse segment trees A dynamic segment tree is useful when the underlying array is sparse, i. e. , the range [0,n−1] of allowed indices is large, but most array values are zeros. While an ordinary segment tree uses O(n) memory, a dynamic segment tree only uses O(klogn) memory, where k is the number of operations performed. A sparse segment tree initially has only one node [0,n − 1] whose value is zero, which means that every array value is zero. After updates, new nodes are dynamically added to the tree.",
+      "locator": "Page 271",
+      "firstSeen": "dp-1-3"
+    },
+    {
+      "id": "auto:000154-839d3a03",
+      "sourceKey": "1:1:auto:000154-839d3a03",
+      "text": "We will first see how dynamic programming can be used to find an optimal solution, and then we will use the same idea for counting the solutions. Understanding dynamic programming is a milestone in every competitive programmer’s career. While the basic idea is simple, the challenge is how to apply dynamic programming to different problems. This chapter introduces a set of classic problems that are a good starting point. 7. 1 Coin problem We first focus on a problem that we have already seen in Chapter 6: Given a set of coin values coins = {c1, c2,... , ck} and a target sum of money n, our task is to form the sum n using as few coins as possible. In Chapter 6, we solved the problem using a greedy algorithm that always chooses the largest possible coin. The greedy algorithm works, for example, when the coins are the euro coins, but in the general case the greedy algorithm does not necessarily produce an optimal solution.",
+      "locator": "Page 75",
+      "firstSeen": "dp-1-4"
+    },
+    {
+      "id": "auto:000238-7e13d29a",
+      "sourceKey": "1:1:auto:000238-7e13d29a",
+      "text": "10. 5 Dynamic programming Bit operations provide an efficient and convenient way to implement dynamic programming algorithms whose states contain subsets of elements, because such states can be stored as integers. Next we discuss examples of combining bit operations and dynamic programming. Optimal selection As a first example, consider the following problem: We are given the prices of k products over n days, and we want to buy each product exactly once. However, we are allowed to buy at most one product in a day. What is the minimum total price? For example, consider the following scenario (k = 3 and n = 8): product 0 product 1 product 2 0 1 2 3 4 5 6 7 6 9 5 2 8 9 1 6 8 2 6 2 7 5 7 2 5 3 9 7 3 5 1 4 In this scenario, the minimum total price is 5: product 0 product 1 product 2 0 1 2 3 4 5 6 7 6 9 5 2 8 9 1 6 8 2 6 2 7 5 7 2 5 3 9 7 3 5 1 4 Let price[x][d] denote the price of product x on day d. For example, in the above scenario price[2][3] = 7.",
+      "locator": "Page 112",
+      "firstSeen": "dp-1-5"
+    },
+    {
+      "id": "auto:000260-1db34cc5",
+      "sourceKey": "1:1:auto:000260-1db34cc5",
+      "text": "Chapter 12\n\nGraph traversal This chapter discusses two fundamental graph algorithms: depth-first search and breadth-first search. Both algorithms are given a starting node in the graph, and they visit all nodes that can be reached from the starting node. The difference in the algorithms is the order in which they visit the nodes. 12.1 Depth-first search Depth-first search (DFS) is a straightforward graph traversal technique. The algorithm begins at a starting node, and proceeds to all other nodes that are reachable from the starting node using the edges of the graph. Depth-first search always follows a single path in the graph as long as it finds new nodes. After this, it returns to previous nodes and begins to explore other parts of the graph. The algorithm keeps track of visited nodes, so that it processes each node only once.\n\nExample",
+      "locator": "Page 127",
+      "firstSeen": "traversal-1-1"
+    },
+    {
+      "id": "auto:000264-2389685c",
+      "sourceKey": "1:1:auto:000264-2389685c",
+      "text": "12.2 Breadth-first search Breadth-first search (BFS) visits the nodes in increasing order of their distance from the starting node. Thus, we can calculate the distance from the starting node to all other nodes using breadth-first search. However, breadth-first search is more difficult to implement than depth-first search. Breadth-first search goes through the nodes one level after another. First the search explores the nodes whose distance from the starting node is 1, then the nodes whose distance is 2, and so on. This process continues until all nodes have been visited.\n\nExample\n\nLet us consider how breadth-first search processes the following graph: 1 2 3 4 5 6 Suppose that the search begins at node 1. First, we process all nodes that can be reached from node 1 using a single edge: 1 2 3 4 5 6 After this, we proceed to nodes 3 and 5: 1 2 3 4 5 6 Finally, we visit node 6: 1 2 3 4 5 6 119",
+      "locator": "Page 129",
+      "firstSeen": "traversal-1-1"
+    },
+    {
+      "id": "auto:000007-0ac441ff",
+      "sourceKey": "1:1:auto:000007-0ac441ff",
+      "text": "100 10. 5 Dynamic programming . . . . . . . . . . . . . . . . . . . . . . . . . . 102 II Graph algorithms 107 11 Basics of graphs 109 11. 1 Graph terminology . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 109 11. 2 Graph representation . . . . . . . . . . . . . . . . . . . . . . . . . . . 113 12 Graph traversal 117 12. 1 Depth-first search . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 117 12. 2 Breadth-first search . . . . . . . . . . . . . . . . . . . . . . . . . . . . 119 12. 3 Applications . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 121 iv",
+      "locator": "Page 4",
+      "firstSeen": "traversal-1-1"
+    },
+    {
+      "id": "auto:000392-bfaed872",
+      "sourceKey": "1:1:auto:000392-bfaed872",
+      "text": "The Edmonds–Karp algorithm [18] chooses each path so that the number of edges on the path is as small as possible. This can be done by using breadth￾first search instead of depth-first search for finding paths. It can be proven that this guarantees that the flow increases quickly, and the time complexity of the algorithm is O(m2n). The scaling algorithm [2] uses depth-first search to find paths where each edge weight is at least a threshold value. Initially, the threshold value is some large number, for example the sum of all edge weights of the graph. Always when a path cannot be found, the threshold value is divided by 2. The time complexity of the algorithm is O(m2 log c), where c is the initial threshold value. In practice, the scaling algorithm is easier to implement, because depth-first search can be used for finding paths. Both algorithms are efficient enough for problems that typically appear in programming contests.",
+      "locator": "Page 195",
+      "firstSeen": "traversal-1-1"
+    },
+    {
+      "id": "auto:000268-f00e75fb",
+      "sourceKey": "1:1:auto:000268-f00e75fb",
+      "text": "12. 3 Applications Using the graph traversal algorithms, we can check many properties of graphs. Usually, both depth-first search and bredth-first search may be used, but in practice, depth-first search is a better choice, because it is easier to implement. In the following applications we will assume that the graph is undirected. Connectivity check A graph is connected if there is a path between any two nodes of the graph. Thus, we can check if a graph is connected by starting at an arbitrary node and finding out if we can reach all other nodes. For example, in the graph 1 2 3 4 5 a depth-first search from node 1 visits the following nodes: 1 2 3 4 5 Since the search did not visit all the nodes, we can conclude that the graph is not connected. In a similar way, we can also find all connected components of a graph by iterating through the nodes and always starting a new depth-first search if the current node does not belong to any component yet.",
+      "locator": "Page 131",
+      "firstSeen": "traversal-1-2"
+    },
+    {
+      "id": "auto:000266-5b23f964",
+      "sourceKey": "1:1:auto:000266-5b23f964",
+      "text": "Breadth-first search is more difficult to implement than depth-first search, be￾cause the algorithm visits nodes in different parts of the graph. A typical imple￾mentation is based on a queue that contains nodes. At each step, the next node in the queue will be processed. The following code assumes that the graph is stored as adjacency lists and maintains the following data structures: queue<int> q; bool visited[N]; int distance[N]; The queue q contains nodes to be processed in increasing order of their distance. New nodes are always added to the end of the queue, and the node at the beginning of the queue is the next node to be processed. The array visited indicates which nodes the search has already visited, and the array distance will contain the distances from the starting node to all nodes of the graph. The search can be implemented as follows, starting at node x: visited[x] = true; distance[x] = 0; q. push(x); while (! q. empty()) { int s = q. front(); q.",
+      "locator": "Page 130",
+      "firstSeen": "traversal-1-3"
+    },
+    {
+      "id": "auto:000008-13eaa2ce",
+      "sourceKey": "1:1:auto:000008-13eaa2ce",
+      "text": "13 Shortest paths 123 13. 1 Bellman–Ford algorithm . . . . . . . . . . . . . . . . . . . . . . . . . 123 13. 2 Dijkstra’s algorithm . . . . . . . . . . . . . . . . . . . . . . . . . . . . 126 13. 3 Floyd–Warshall algorithm . . . . . . . . . . . . . . . . . . . . . . . . 129 14 Tree algorithms 133 14. 1 Tree traversal . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 134 14. 2 Diameter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 135 14. 3 All longest paths . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 137 14. 4 Binary trees . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 139 15 Spanning trees 141 15. 1 Kruskal’s algorithm . . . . . . . . . . . . . . . . . . . . . . . . . . . . 142 15. 2 Union-find structure . . . . . . . . . . . . . . . . . . . . . . . . . . . . 145 15. 3 Prim’s algorithm . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 147 16 Directed graphs 149 16. 1 Topological sorting . . . . . . . .",
+      "locator": "Page 5",
+      "firstSeen": "shortest-paths-1-1"
+    },
+    {
+      "id": "auto:000279-ab4e7884",
+      "sourceKey": "1:1:auto:000279-ab4e7884",
+      "text": "2 Dijkstra’s algorithm Dijkstra’s algorithm2 finds shortest paths from the starting node to all nodes of the graph, like the Bellman–Ford algorithm. The benefit of Dijsktra’s algorithm is that it is more efficient and can be used for processing large graphs. However, the algorithm requires that there are no negative weight edges in the graph. Like the Bellman–Ford algorithm, Dijkstra’s algorithm maintains distances to the nodes and reduces them during the search. Dijkstra’s algorithm is efficient, because it only processes each edge in the graph once, using the fact that there are no negative edges.\n\nExample",
+      "locator": "Page 136",
+      "firstSeen": "shortest-paths-1-1"
+    },
+    {
+      "id": "auto:000272-2a6f6a8c",
+      "sourceKey": "1:1:auto:000272-2a6f6a8c",
+      "text": "Chapter 13\n\nShortest paths Finding a shortest path between two nodes of a graph is an important problem that has many practical applications. For example, a natural problem related to a road network is to calculate the shortest possible length of a route between two cities, given the lengths of the roads. In an unweighted graph, the length of a path equals the number of its edges, and we can simply use breadth-first search to find a shortest path. However, in this chapter we focus on weighted graphs where more sophisticated algorithms are needed for finding shortest paths. 13. 1 Bellman–Ford algorithm The Bellman–Ford algorithm1 finds shortest paths from a starting node to all nodes of the graph. The algorithm can process all kinds of graphs, provided that the graph does not contain a cycle with negative length. If the graph contains a negative cycle, the algorithm can detect this. The algorithm keeps track of distances from the starting node to all nodes of the graph.",
+      "locator": "Page 133",
+      "firstSeen": "shortest-paths-1-1"
+    },
+    {
+      "id": "auto:000285-80cd8115",
+      "sourceKey": "1:1:auto:000285-80cd8115",
+      "text": "Note that the priority queue contains negative distances to nodes. The reason for this is that the default version of the C++ priority queue finds maximum elements, while we want to find minimum elements. By using negative distances, we can directly use the default priority queue3 . Also note that there may be several instances of the same node in the priority queue; however, only the instance with the minimum distance will be processed. The time complexity of the above implementation is O(n+ mlogm), because the algorithm goes through all nodes of the graph and adds for each edge at most one distance to the priority queue. 13. 3 Floyd–Warshall algorithm The Floyd–Warshall algorithm4 provides an alternative way to approach the problem of finding shortest paths. Unlike the other algorithms of this chapter, it finds all shortest paths between the nodes in a single run. The algorithm maintains a two-dimensional array that contains distances between the nodes.",
+      "locator": "Page 139",
+      "firstSeen": "shortest-paths-1-1"
+    },
+    {
+      "id": "auto:000606-dc0628d4",
+      "sourceKey": "1:1:auto:000606-dc0628d4",
+      "text": "difference, 12 difference array, 93 Dijkstra’s algorithm, 126, 153 Dilworth’s theorem, 193 Diophantine equation, 204 Dirac’s theorem, 177 directed graph, 110 disjunction, 13 distance function, 272 distribution, 229 divisibility, 197 divisor, 197 dynamic array, 35 dynamic programming, 65 dynamic segment tree, 261 edge, 109 edge list, 115 edit distance, 74 Edmonds–Karp algorithm, 184 equivalence, 13 Euclid’s algorithm, 200 Euclid’s formula, 206 Euclidean distance, 272 Euler tour technique, 168 Euler’s theorem, 202 Euler’s totient function, 201 Eulerian circuit, 174 Eulerian path, 173 expected value, 229 extended Euclid’s algorithm, 204 factor, 197 factorial, 14 Faulhaber’s formula, 10 Fenwick tree, 86 Fermat’s theorem, 202 Fibonacci number, 14, 206, 220 floating point number, 7 flow, 181 Floyd’s algorithm, 156 Floyd–Warshall algorithm, 129 Ford–Fulkerson algorithm, 182 Freivalds’ algoritm, 232 functional graph, 154 geometric distribution, 230 geometric progression, 11 geometry, 265 Goldb",
+      "locator": "Page 298",
+      "firstSeen": "shortest-paths-1-2"
+    },
+    {
+      "id": "auto:000280-fd1f0a2e",
+      "sourceKey": "1:1:auto:000280-fd1f0a2e",
+      "text": "Let us consider how Dijkstra’s algorithm works in the following graph when the starting node is node 1: 3 4 2 1 5 ∞ ∞ ∞ 0 ∞ 6 2 5 9 2 1 Like in the Bellman–Ford algorithm, initially the distance to the starting node is 0 and the distance to all other nodes is infinite. At each step, Dijkstra’s algorithm selects a node that has not been processed yet and whose distance is as small as possible. The first such node is node 1 with distance 0. 2E. W. Dijkstra published the algorithm in 1959 [14]; however, his original paper does not mention how to implement the algorithm efficiently. 126",
+      "locator": "Page 136",
+      "firstSeen": "shortest-paths-1-3"
+    },
+    {
+      "id": "auto:000290-3350ac68",
+      "sourceKey": "1:1:auto:000290-3350ac68",
+      "text": "The advantage of the Floyd–Warshall algorithm that it is easy to implement. The following code constructs a distance matrix where distance[a][b] is the shortest distance between nodes a and b. First, the algorithm initializes distance using the adjacency matrix adj of the graph: for (int i = 1; i <= n; i++) { for (int j = 1; j <= n; j++) { if (i == j) distance[i][j] = 0; else if (adj[i][j]) distance[i][j] = adj[i][j]; else distance[i][j] = INF; } } After this, the shortest distances can be found as follows: for (int k = 1; k <= n; k++) { for (int i = 1; i <= n; i++) { for (int j = 1; j <= n; j++) { distance[i][j] = min(distance[i][j], distance[i][k]+distance[k][j]); } } } The time complexity of the algorithm is O(n 3 ), because it contains three nested loops that go through the nodes of the graph. Since the implementation of the Floyd–Warshall algorithm is simple, the algorithm can be a good choice even if it is only needed to find a single shortest path in the graph.",
+      "locator": "Page 141",
+      "firstSeen": "shortest-paths-1-4"
+    },
+    {
+      "id": "auto:000276-6f5226e1",
+      "sourceKey": "1:1:auto:000276-6f5226e1",
+      "text": "If there are no negative cycles in the graph, all distances are final after n −1 rounds, because each shortest path can contain at most n−1 edges. In practice, the final distances can usually be found faster than in n−1 rounds. Thus, a possible way to make the algorithm more efficient is to stop the algorithm if no distance can be reduced during a round. Negative cycles The Bellman–Ford algorithm can also be used to check if the graph contains a cycle with negative length. For example, the graph 1 2 3 4 3 1 5 −7 2 contains a negative cycle 2 → 3 → 4 → 2 with length −4. If the graph contains a negative cycle, we can shorten infinitely many times any path that contains the cycle by repeating the cycle again and again. Thus, the concept of a shortest path is not meaningful in this situation. A negative cycle can be detected using the Bellman–Ford algorithm by running the algorithm for n rounds. If the last round reduces any distance, the graph contains a negative cycle.",
+      "locator": "Page 135",
+      "firstSeen": "shortest-paths-1-5"
+    }
+  ]
+}
