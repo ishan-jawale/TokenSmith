@@ -17,6 +17,7 @@ const packageData = { question: 'Why keep a path?', objective: 'Explain split pr
 ], explanation: 'The path lets insertion revisit parents after a split.', hint: 'Consider which node changes next.' }
 const trueFalseData = { ...packageData, question: 'Paths let insertion propagate splits to parents.', correctAnswer: true,
   questionAssessment: 'The passage supports the statement.', questionIssue: '' }
+const trueFalseIdData = { ...trueFalseData, criteria: [{ id: 'c1', description: 'Propagation to parents.', evidenceIds: ['P1-E1'] }] }
 const question = { id: 'q1', ...parsePracticeQuestion(JSON.stringify(packageData), [source]), draft: 'To revisit ancestors.', attempts: [], reviewing: false }
 const feedback = { questionAssessment: 'The question is supported and answerable.', checks: [{ criterionId: 'c1', status: 'met', feedback: 'You identified where updates propagate.' }], improvement: '', nextStep: '', questionIssue: '' }
 const model = { id: 'model1', status: 'ready' }
@@ -29,7 +30,7 @@ function harness(overrides = {}) {
   const bridge = {
     practiceSources: async (...args) => { calls.push(['sources', ...args]); return [source] },
     sendChatMessage: async request => { calls.push(['model', request]); return {
-      text: JSON.stringify(trueFalseData), sources: [source] } },
+      text: JSON.stringify(trueFalseIdData), sources: request.retrievedSources } },
     ...overrides
   }
   return { calls, client: createPracticeClient(bridge, model, settings) }
@@ -41,7 +42,7 @@ test('topic retrieval is scoped once, reused on Next, and never falls back to ra
   const bridge = {
     searchLibrary: async (...args) => { calls.push(['search', ...args]); return { sources: [outside, source, source] } },
     practiceSources: async () => { throw new Error('Unrelated whole-document sampling') },
-    sendChatMessage: async request => { calls.push(['model', request]); return { text: JSON.stringify(trueFalseData), sources: request.retrievedSources } }
+    sendChatMessage: async request => { calls.push(['model', request]); return { text: JSON.stringify(trueFalseIdData), sources: request.retrievedSources } }
   }
   const client = createPracticeClient(bridge, model, settings, { materials: [{ id: 'c1' }, { id: 'other' }], embeddingModels: [{ id: 'nomic' }] })
   const signal = new AbortController().signal
@@ -143,8 +144,8 @@ test('resuming a legacy 2K practice session leaves room for True/False questions
       model: { ...model, engine: 'ollama', contextLength: 262144 } })
     assert.equal(prepared.budget.modelContextTokens, 262144)
     assert.ok(prepared.budget.estimatedPromptTokens + prepared.budget.answerReserveTokens + prepared.budget.safetyMarginTokens <= 262144)
-    assert.deepEqual(prepared.sources, [source])
-    return { text: request.practiceTask === 'true_false_question' ? JSON.stringify(trueFalseData) : 'An explanation.', sources: [source] }
+    assert.deepEqual(prepared.sources.map(({ practiceEvidenceLabel, ...original }) => original), [source])
+    return { text: request.practiceTask === 'true_false_question' ? JSON.stringify(trueFalseIdData) : 'An explanation.', sources: request.retrievedSources }
   } })
   await client.question(restored, 'next', new AbortController().signal)
   await client.discuss(restored, question, 'Explain this term.', 'help')
@@ -188,7 +189,7 @@ test('one question call prepares the question, saved criteria, hint and explanat
   assert.equal(request.practiceTask, 'true_false_question')
   assert.deepEqual(request.messages, [])
   assert.deepEqual(request.materials, [])
-  assert.deepEqual(request.retrievedSources, [source])
+  assert.deepEqual(request.retrievedSources, [{ ...source, practiceEvidenceLabel: 'P1' }])
   assert.equal(request.applicationSettings.suggestionMode, 'off')
   assert.equal(request.modelSettings.thinking, false)
   assert.equal(request.modelSettings.maxLength, 2048)
@@ -273,7 +274,7 @@ test('a rejected question is logged and regenerated once from the same passages'
   let replies = 0
   const { client, calls } = harness({
     sendChatMessage: async request => { calls.push(['model', request]); replies++
-      return { text: replies === 1 ? '{"question": "Unsupported?"}' : JSON.stringify(trueFalseData), sources: [source] } },
+      return { text: replies === 1 ? '{"question": "Unsupported?"}' : JSON.stringify(trueFalseIdData), sources: request.retrievedSources } },
     logPracticeQuestionRejected: async detail => { rejected.push(detail) }
   })
   const generated = await client.question(session, 'r', new AbortController().signal)

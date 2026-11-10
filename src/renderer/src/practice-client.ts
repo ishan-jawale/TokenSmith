@@ -3,7 +3,8 @@ import type { TokenSmithBridge } from '@shared/bridge'
 import type { PracticeAttempt, PracticeQuestion, PracticeSession, TopicMastery } from '@shared/practice'
 import { isTrueFalseFeedback, practiceSourceKey, practiceReference, practiceDiscussionPassage, practiceQuestionText, practiceTopic } from '../../shared/practice'
 import { trimReferenceExchange } from '../../shared/study-chat-pipeline'
-import { parsePracticeQuestion, parsePracticeTopics, quizQuestionPrompt } from '../../shared/quiz'
+import { parsePracticeQuestionFromEvidenceIds, parsePracticeTopics, quizQuestionPrompt } from '../../shared/quiz'
+import { labelPracticeSources } from '../../shared/practice-evidence-citations'
 import { sourcesInScope, type StudyDocumentRef } from '../../shared/study-scope'
 
 const practiceQuestionAttempts = 2
@@ -14,7 +15,7 @@ export function createPracticeClient(bridge: TokenSmithBridge, model: LocalModel
     if (model.id !== session.modelId || model.status !== 'ready') throw new Error('The model used for this session is unavailable. Reconnect it before continuing.')
     return bridge.sendChatMessage({
       requestId, practiceTask: 'true_false_question', prompt, messages: [], materials: [], model, settings,
-      retrievedSources: sources, conversationContextMode: 'standalone', reasoning: false,
+      retrievedSources: labelPracticeSources(sources), conversationContextMode: 'standalone', reasoning: false,
       applicationSettings: { ...settings.application, suggestionMode: 'off', explanationDepthEnabled: false },
       modelSettings: { ...session.modelSettings, systemMessage: '', reasoningMode: 'off', thinking: false,
         maxLength: Math.min(session.modelSettings.maxLength, 2048) }
@@ -70,7 +71,7 @@ export function createPracticeClient(bridge: TokenSmithBridge, model: LocalModel
       signal.throwIfAborted()
       if (!sources.length) return null
       const previousQuestions = session.questions.slice(-12).map(practiceQuestionText)
-      let prepared: ReturnType<typeof parsePracticeQuestion> | undefined
+      let prepared: ReturnType<typeof parsePracticeQuestionFromEvidenceIds> | undefined
       let rejection: string | undefined
       for (let attempt = 1; !prepared; attempt++) {
         // Repeating an identical request returns nearly the same package, so say what to fix.
@@ -78,7 +79,7 @@ export function createPracticeClient(bridge: TokenSmithBridge, model: LocalModel
         const reply = await send(session, requestId, prompt, sources)
         signal.throwIfAborted()
         try {
-          prepared = parsePracticeQuestion(reply.text, reply.sources, 'true_false')
+          prepared = parsePracticeQuestionFromEvidenceIds(reply.text, reply.sources)
         } catch (error) {
           const reason = error instanceof Error ? String(error.cause ?? error.message) : String(error)
           rejection = reason

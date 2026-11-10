@@ -2,6 +2,7 @@ import type { ChatSource, ExplanationDepth, LocalModel, ModelRuntimeSettings } f
 import type { EngineChatRequest, EngineQuestionSuggestionRequest } from '../../shared/engine'
 import { practiceSystemPrompt } from '../../shared/quiz'
 import { practiceSourceKey } from '../../shared/practice'
+import { labelPracticeSources, practiceEvidenceText } from '../../shared/practice-evidence-citations'
 import { trimReferenceExchange } from '../../shared/study-chat-pipeline'
 import { questionWithSelection, selectedPassageReference } from '../../shared/chat-selection'
 import { answerTokenAllowance, effectiveContextLength } from '../../shared/model-context'
@@ -89,6 +90,7 @@ interface SourceContextOptions {
   explanationDepth?: ExplanationDepth
   systemInstructions?: string
   includeEvidenceIds?: boolean
+  evidenceUnitIds?: boolean
   wholeSources?: boolean
 }
 
@@ -302,38 +304,37 @@ export function packSourceContext(
     return { context: '', budget, sources: includedSources }
   }
 
-  const terms = queryTerms(options.evidenceQuery ?? options.prompt ?? '')
+  const wholeSources = options.evidenceUnitIds || options.wholeSources || usesWholeSourceBudget(options.model)
+  const terms = options.includeBudget && !wholeSources ? queryTerms(options.evidenceQuery ?? options.prompt ?? '') : []
+  const charsPerToken = sourceCharsPerToken(options.model)
+  const countTokens = (text: string) => Math.ceil(text.length / charsPerToken)
   const blocks: string[] = []
   let usedSourceTokens = 0
   let truncatedSourceCount = 0
 
   for (const source of sources) {
-    const prefix = (options.includeEvidenceIds ? `Evidence ID: ${practiceSourceKey(source)}\n` : '') + sourcePrefix(source)
+    const prefix = (options.includeEvidenceIds && !options.evidenceUnitIds ? `Evidence ID: ${practiceSourceKey(source)}\n` : '') + sourcePrefix(source)
     const suffix = '\n### End source unit\n'
+    const remainingTokens = budget.sourceBudgetTokens - usedSourceTokens
+    const textBudgetTokens = remainingTokens - countTokens(prefix + suffix) - 4
+    if (options.includeBudget && textBudgetTokens < minSourceTextTokens) {
+      break
+    }
+    const fullText = options.evidenceUnitIds
+      ? { text: practiceEvidenceText(source), truncated: false }
+      : sourceText(source)
     if (!options.includeBudget) {
-      const unbudgetedText = sourceText(source)
-      blocks.push(`${prefix}${unbudgetedText.text}${suffix}`)
+      blocks.push(`${prefix}${fullText.text}${suffix}`)
       includedSources.push(source)
       continue
     }
 
-    const remainingTokens = budget.sourceBudgetTokens - usedSourceTokens
-    const charsPerToken = sourceCharsPerToken(options.model)
-    const countTokens = (text: string) => Math.ceil(text.length / charsPerToken)
-    const prefixTokens = countTokens(prefix + suffix)
-    const textBudgetTokens = remainingTokens - prefixTokens - 4
-    if (textBudgetTokens < minSourceTextTokens) {
-      break
-    }
-
     // Keep code and evidence units intact for Ollama's measured prompt path.
     // A smaller later unit may still fit, so do not stop at an oversized unit.
-    if ((options.wholeSources || usesWholeSourceBudget(options.model)) && countTokens(sourceText(source).text) > textBudgetTokens) {
+    if (wholeSources && countTokens(fullText.text) > textBudgetTokens) {
       continue
     }
-    const clipped = options.wholeSources || usesWholeSourceBudget(options.model)
-      ? sourceText(source)
-      : sourceText(source, textBudgetTokens, terms)
+    const clipped = wholeSources ? fullText : sourceText(source, textBudgetTokens, terms)
     const block = `${prefix}${clipped.text}${suffix}`
     const blockTokens = countTokens(block)
     if (blockTokens > remainingTokens) {
@@ -500,7 +501,9 @@ export function prepareStudyChatMessages(request: EngineChatRequest): {
   const configuredSystemMessage = modelSettings?.systemMessage?.trim()
   const answerPrompt = answerPromptForRequest(request)
   const referenceText = request.practiceTask ? '' : chatReferenceText(request)
-  const { context, budget, sources } = packSourceContext(request.retrievedSources ?? [], {
+  const evidenceUnitIds = request.practiceTask === 'true_false_question'
+  const inputSources = evidenceUnitIds ? labelPracticeSources(request.retrievedSources ?? []) : request.retrievedSources ?? []
+  const { context, budget, sources } = packSourceContext(inputSources, {
     prompt: answerPrompt,
     evidenceQuery: request.retrievalQuery,
     referenceText,
@@ -511,6 +514,7 @@ export function prepareStudyChatMessages(request: EngineChatRequest): {
     explanationDepth: request.practiceTask ? undefined : requestExplanationDepth(request.applicationSettings),
     systemInstructions: practiceInstructions,
     includeEvidenceIds: Boolean(request.practiceTask),
+    evidenceUnitIds,
     wholeSources: Boolean(request.practiceTask)
   })
   if (request.selectedPassage && budget.fixedPromptTokens + budget.answerReserveTokens + budget.safetyMarginTokens > budget.modelContextTokens) {

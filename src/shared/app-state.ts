@@ -144,6 +144,8 @@ export interface ChatSource {
   chunkRowid?: number | string
   chunkKind?: string
   sourceUnitId?: string
+  /** Temporary request-local label; removed before saving a practice question. */
+  practiceEvidenceLabel?: string
   sourceUnitComplete?: boolean
   sourceChunkIds?: string[]
   tokensmithChunkId?: string
