@@ -156,6 +156,7 @@ const model = values.provider === 'ollama'
 const embedder = { id: 'benchmark-embedder', name: values.embedder, engine: 'ollama', role: 'embedder',
   ollamaModelName: values.embedder, ollamaBaseUrl: baseUrl }
 const suite = { createdAt: new Date().toISOString(), status: 'running', smoke: Boolean(values.smoke),
+  evidenceMode: 'unit-ids',
   method: 'Production Practice topic retrieval, source rotation, prompt, provider and parser; isolated Basic full-book import. Production validation retries are recorded; no extra benchmark retries. No UI timing. Accepted means application validation only; semantic quality is ungraded.',
   gitCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
   gitBranch: execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim(),
@@ -164,7 +165,7 @@ const suite = { createdAt: new Date().toISOString(), status: 'running', smoke: B
   application, preparationSettings, settingsSource: 'Application built-in defaults from shared/default-settings.ts; existing Practice-specific overrides are applied by the production client/provider.',
   chatModelMetadata: values.provider === 'ollama' ? installed(models, values.model) : undefined,
   embedderMetadata: installed(models, values.embedder), reviewStatus: 'ungraded',
-  codeHashes: Object.fromEntries(['src/renderer/src/practice-client.ts', 'src/shared/default-settings.ts', 'src/shared/model-defaults.ts', 'src/shared/preparation.ts', 'src/shared/quiz.ts', 'src/shared/practice-evidence.ts',
+  codeHashes: Object.fromEntries(['src/renderer/src/practice-client.ts', 'src/shared/default-settings.ts', 'src/shared/model-defaults.ts', 'src/shared/preparation.ts', 'src/shared/quiz.ts', 'src/shared/practice-evidence.ts', 'src/shared/practice-evidence-units.ts', 'src/shared/practice-evidence-citations.ts',
     'src/main/engine/study-chat-format.ts', 'src/main/engine/ollama-service.ts', 'src/main/engine/remote-chat-service.ts',
     'python_engine/tokensmith_engine.py', 'python_engine/tokensmith_store.py',
     'tests/experiments/benchmark-practice.mjs', 'tests/experiments/practice-benchmark-worker.py'].map(p => [p, hash(p)])),

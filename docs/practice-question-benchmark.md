@@ -24,6 +24,9 @@ before generating anything, and prevents idle sleep on macOS while the run is
 active. Keep the laptop lid, Terminal, server and tunnel open. The full output
 directory is printed when generation starts. Add `--check` for readiness only, or
 `--smoke` for a one-question trial. No extra installation or app launch is needed.
+The same command can be run again after code changes: each run evaluates the
+current working tree, including uncommitted changes, and saves a separate code
+snapshot and results directory. `--plan` prints the 60-slot sampling plan offline.
 
 The lower-level commands below are available for running individual stages.
 
@@ -133,3 +136,20 @@ keep any interrupted run and label it incomplete rather than combining runs sile
 It requires `TOKENSMITH_BENCHMARK_API_KEY` in the terminal environment; it does not
 read the installed app's encrypted credentials or save the key. Nomic embeddings
 still require Ollama/Ada. The current agreed baseline is local `gemma4:12b`.
+
+## Evidence-ID generation experiment
+
+True/False question generation now presents labeled evidence units (P1-E1, etc.)
+and asks for up to six evidenceIds per criterion instead of copied quotes.
+Labels are assigned before packing and remain stable when passages are omitted.
+Only IDs belonging to provider-retained passages may resolve. The parser saves
+original sourceKey/quote citations and removes request-only passage labels; old
+saved exercises need no migration. Question-issue checks and Joshua's two-attempt
+limit remain. Failure memory/passage rotation behavior has not been changed.
+
+The benchmark records evidenceMode=unit-ids, both new source-file hashes,
+request sources/labels, raw HTTP messages (including rendered evidence), responses
+and retries. It still uses the frozen handbook, Gemma 4 12B, six topics and ten
+slots per topic. Code snapshots include the splitter and resolver. Compare delivery,
+invalid-ID failures, retries, token usage and timings with the previous run, and
+review semantic support separately.

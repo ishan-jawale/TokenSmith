@@ -27,7 +27,9 @@
     "build": "npm run typecheck && electron-vite build",
     "package:mac": "node scripts/package-mac.mjs",
     "package:win": "node scripts/package-win.mjs",
-    "package:linux": "node scripts/package-linux.mjs"
+    "package:linux": "node scripts/package-linux.mjs",
+    "test:evidence-units": "bash scripts/test-practice-evidence.sh",
+    "test:evidence-buzzdb": "bash scripts/test-buzzdb-evidence.sh"
   },
   "dependencies": {
     "katex": "^0.16.47",

@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const rootDir = resolve(new URL('../..', import.meta.url).pathname)
+const rootDir = fileURLToPath(new URL('../..', import.meta.url))
 
 export const buzzdbFixturePath = resolve(rootDir, 'tests/fixtures/buzzdb/buzzdb-book.tokensmith.md')
 export const buzzdbFixtureText = readFileSync(buzzdbFixturePath, 'utf8')
